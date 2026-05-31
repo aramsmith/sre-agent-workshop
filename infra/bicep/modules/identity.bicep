@@ -10,9 +10,6 @@ param tags object
 @description('AKS OIDC issuer URL')
 param aksOidcIssuerUrl string
 
-@description('CosmosDB account name')
-param cosmosDbAccountName string
-
 @description('Kubernetes namespace for the workload')
 param k8sNamespace string = 'workshop'
 
@@ -43,17 +40,6 @@ resource federatedCredential 'Microsoft.ManagedIdentity/userAssignedIdentities/f
     ]
   }
 }
-
-// ──────────────────────────────────────────────
-// CosmosDB role assignment for the UAMI
-// Uses the built-in "Cosmos DB Built-in Data Contributor" role
-// so the app can read and write documents.
-//
-// NOTE: Uses inline resource ID construction instead of an `existing`
-// reference to avoid ARM deployment caching issues where the role
-// assignment could be silently skipped on re-deployment.
-// ──────────────────────────────────────────────
-var cosmosAccountId = resourceId('Microsoft.DocumentDB/databaseAccounts', cosmosDbAccountName)
 
 // ── Outputs ──────────────────────────────────
 @description('User-Assigned Managed Identity client ID')
