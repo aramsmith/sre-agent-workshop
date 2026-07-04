@@ -76,7 +76,17 @@ jobs:
 
       - name: Wait for rollout
         run: |
-          kubectl rollout status deployment/web-app -n workshop --timeout=120s
+          # Trigger a fresh rollout so stale failure conditions from previous runs
+          # don't cause an immediate false failure.
+          kubectl rollout restart deployment/web-app -n workshop
+
+          if ! kubectl rollout status deployment/web-app -n workshop --timeout=300s; then
+            echo "Rollout failed. Gathering diagnostics..."
+            kubectl get deployment web-app -n workshop -o wide
+            kubectl get pods -n workshop -o wide
+            kubectl describe deployment web-app -n workshop
+            exit 1
+          fi
 
       - name: Print app URL
         run: |
