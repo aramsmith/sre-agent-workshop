@@ -65,8 +65,8 @@ module cosmos 'modules/cosmosdb.bicep' = {
 }
 
 // ──────────────────────────────────────────────
-// 4. Identity (UAMI + Federated Cred + CosmosDB role)
-//    Depends on AKS (OIDC issuer) and CosmosDB (role scope)
+// 4. Identity (UAMI + Federated Credential)
+//    Depends on AKS (OIDC issuer URL)
 // ──────────────────────────────────────────────
 module identity 'modules/identity.bicep' = {
   name: 'identity'
@@ -75,7 +75,6 @@ module identity 'modules/identity.bicep' = {
     workloadName: workloadName
     tags: tags
     aksOidcIssuerUrl: aks.outputs.oidcIssuerUrl
-    cosmosDbAccountName: cosmos.outputs.accountName
   }
 }
 
