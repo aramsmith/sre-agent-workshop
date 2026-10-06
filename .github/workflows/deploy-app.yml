@@ -99,6 +99,9 @@ jobs:
           # Service
           kubectl apply -f k8s/service.yaml
 
+          # Force a fresh rollout even when manifests are unchanged (e.g. mutable :latest tag)
+          kubectl rollout restart deployment/web-app -n workshop
+
       - name: Wait for rollout
         run: |
           # Trigger a fresh rollout so stale failure conditions from previous runs
